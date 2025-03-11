@@ -2,13 +2,15 @@ package ru.isshepelev.note.infrastructure.persistance.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Data
-public class User {
+public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +22,7 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Note> notes;
 

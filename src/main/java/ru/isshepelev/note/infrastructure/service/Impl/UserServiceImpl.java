@@ -20,6 +20,7 @@ import java.util.Set;
 @RequiredArgsConstructor
 @Slf4j
 public class UserServiceImpl implements UserService {
+
     private final UserRepository userRepository;
     private final NoteRepository noteRepository;
     private final PasswordEncoder passwordEncoder;
@@ -35,21 +36,25 @@ public class UserServiceImpl implements UserService {
         user.setPassword(passwordEncoder.encode(signUpDto.getPassword()));
         userRepository.save(user);
         log.info("регистрация пользователя {}", user);
+        createNote("Пример заголовка...", "Пример текста...", user);
 
+    }
+
+    private void createNote(String title, String content, User user) {
         Note note = new Note();
         note.setUser(user);
-        note.setTitle("Пример заголовка");
-        note.setContent("Пример заметки");
+        note.setTitle(title);
+        note.setContent(content);
         note.setCreatedAt(LocalDateTime.now());
         note.setUpdatedAt(LocalDateTime.now());
-        log.info("создание новой заметки {} для пользователя {}", note, user);
+        log.info("Создание новой заметки у " + user);
         noteRepository.save(note);
     }
 
     @Override
     public User getUserByUsername(String username) {
         User user = userRepository.findByUsername(username);
-        if (user == null){
+        if (user == null) {
             log.error("пользователь с " + username + " не найден");
             throw new UsernameNotFoundException("user not found " + username);
         }

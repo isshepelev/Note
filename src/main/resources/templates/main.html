@@ -54,13 +54,16 @@
         }
 
         .note-title input {
-            font-size: 1.8em;
+            font-size: 1.7em;
             font-weight: bold;
-            background-color: transparent;
-            border: none;
+            background-color: #444;
+            border: 2px solid #ffffff;
+            border-radius: 4px;
+            padding: 4px;
             color: #fff;
-            width: 100%;
+            text-align: center;
         }
+
 
         .note-content {
             background-color: #3a3f44;
@@ -184,7 +187,7 @@
         const noteContent = noteElement.getAttribute('data-content');
 
         document.getElementById('note-title').value = noteTitle;
-        document.getElementById('note-content').innerText = noteContent;
+        document.getElementById('note-content').innerHTML = noteContent;
         document.getElementById('note-title').disabled = false;
         currentNoteId = noteId;
 
