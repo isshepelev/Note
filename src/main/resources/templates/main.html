@@ -1,249 +1,280 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Заметки</title>
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      background-color: #2c2f33;
-      color: #ffffff;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Заметки</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #2c2f33;
+            color: #ffffff;
+        }
 
-    .container {
-      display: flex;
-      width: 800px;
-      max-width: 100%;
-      padding: 20px;
-      background-color: #23272a;
-      border-radius: 10px;
-      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
-    }
+        .container {
+            display: flex;
+            width: 800px;
+            max-width: 100%;
+            padding: 20px;
+            background-color: #23272a;
+            border-radius: 10px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
 
-    .note-list {
-      width: 30%;
-      padding-right: 20px;
-      border-right: 2px solid #444;
-    }
+        .note-list {
+            width: 30%;
+            padding-right: 20px;
+            border-right: 2px solid #444;
+        }
 
-    .note-item {
-      cursor: pointer;
-      padding: 10px;
-      background-color: #3a3f44;
-      margin-bottom: 10px;
-      border-radius: 5px;
-      transition: background-color 0.3s;
-    }
+        .note-item {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #3a3f44;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
 
-    .note-item:hover {
-      background-color: #5a6268;
-    }
+        .note-item:hover {
+            background-color: #5a6268;
+        }
 
-    .note-detail {
-      width: 70%;
-      padding-left: 20px;
-      display: flex;
-      flex-direction: column;
-    }
+        .note-detail {
+            width: 70%;
+            padding-left: 20px;
+            display: none;
+            flex-direction: column;
+        }
 
-    .note-title input {
-      font-size: 1.8em;
-      font-weight: bold;
-      background-color: transparent;
-      border: none;
-      color: #fff;
-      width: 100%;
-    }
+        .note-title input {
+            font-size: 1.8em;
+            font-weight: bold;
+            background-color: transparent;
+            border: none;
+            color: #fff;
+            width: 100%;
+        }
 
-    .note-content {
-      background-color: #3a3f44;
-      padding: 10px;
-      border-radius: 5px;
-      min-height: 200px;
-      margin-bottom: 20px;
-      resize: vertical;
-      overflow: auto;
-      color: #fff;
-      font-size: 1.1em;
-      white-space: pre-wrap; /* Сохраняет пробелы и переносы строк */
-    }
+        .note-content {
+            background-color: #3a3f44;
+            padding: 10px;
+            border-radius: 5px;
+            min-height: 200px;
+            margin-bottom: 20px;
+            resize: vertical;
+            overflow: auto;
+            color: #fff;
+            font-size: 1.1em;
+            white-space: pre-wrap;
+        }
 
-    .note-content[contenteditable="true"] {
-      outline: none;
-    }
+        .note-content[contenteditable="true"] {
+            outline: none;
+        }
 
-    .toolbar {
-      margin-bottom: 10px;
-    }
+        .toolbar {
+            margin-bottom: 10px;
+        }
 
-    .toolbar button {
-      padding: 8px;
-      margin-right: 5px;
-      font-size: 14px;
-      background-color: #444;
-      color: #fff;
-      border: none;
-      cursor: pointer;
-    }
+        .toolbar button {
+            padding: 8px;
+            margin-right: 5px;
+            font-size: 14px;
+            background-color: #444;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
 
-    .toolbar button:hover {
-      background-color: #555;
-    }
+        .toolbar button:hover {
+            background-color: #555;
+        }
 
-    .form-container button {
-      padding: 12px 20px;
-      font-size: 16px;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.3s;
-      background-color: #368f00;
-      color: #fff;
-    }
+        .form-container button {
+            padding: 12px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s;
+            background-color: #368f00;
+            color: #fff;
+        }
 
-    .form-container button:hover {
-      background-color: #007007;
-      transform: translateY(-2px);
-    }
+        .form-container button:hover {
+            background-color: #007007;
+            transform: translateY(-2px);
+        }
 
-    .delete-button {
-      background-color: #ff4d4d;
-    }
+        .delete-button {
+            background-color: #ff4d4d;
+        }
 
-    .delete-button:hover {
-      background-color: #d9534f;
-    }
+        .delete-button:hover {
+            background-color: #d9534f;
+        }
 
-    .form-container {
-      display: none;
-    }
+        .form-container {
+            display: none;
+        }
 
-    .form-container.active {
-      display: block;
-    }
+        .form-container.active {
+            display: block;
+        }
 
-  </style>
+    </style>
 </head>
 <body>
 <div class="container">
-  <div class="note-list">
-    <h2>Список Заметок</h2>
-    <ul>
-      <li th:each="note : ${notes}"
-          class="note-item"
-          th:text="${note.title}"
-          th:data-id="${note.id}"
-          th:data-content="${note.content}"
-          onclick="showNoteContent(this)">
-      </li>
-    </ul>
-  </div>
-  <div class="note-detail">
-    <h2 class="note-title">
-      <input type="text" id="note-title" disabled />
-    </h2>
-    <div class="toolbar">
-      <button onclick="formatText('bold')">Жирный</button>
-      <button onclick="formatText('italic')">Курсив</button>
-      <button onclick="formatText('underline')">Подчеркнутый</button>
-      <select onchange="changeFontFamily(event)">
-        <option value="Arial">Arial</option>
-        <option value="Courier New">Courier New</option>
-        <option value="Georgia">Georgia</option>
-      </select>
-      <select onchange="changeFontSize(event)">
-        <option value="16px">16px</option>
-        <option value="18px">18px</option>
-        <option value="20px">20px</option>
-      </select>
+    <div class="note-list">
+        <h2>Список Заметок</h2>
+        <ul>
+            <li class="note-item" onclick="showCreateNote()">
+                Создать новую заметку
+            </li>
+            <li th:each="note : ${notes}"
+                class="note-item"
+                th:text="${note.title}"
+                th:data-id="${note.id}"
+                th:data-content="${note.content}"
+                onclick="showNoteContent(this)">
+            </li>
+        </ul>
     </div>
-    <div class="note-content" contenteditable="true" id="note-content" onclick="editContent()"></div>
-    <div class="form-container" id="form-container">
-      <button onclick="saveNote()">Сохранить</button>
-      <button class="delete-button" onclick="deleteNote()">Удалить</button>
+    <div class="note-detail" id="note-detail">
+        <h2 class="note-title">
+            <input type="text" id="note-title" disabled />
+        </h2>
+        <div class="toolbar">
+            <button onclick="formatText('bold')">Жирный</button>
+            <button onclick="formatText('italic')">Курсив</button>
+            <button onclick="formatText('underline')">Подчеркнутый</button>
+            <select onchange="changeFontFamily(event)">
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+            </select>
+            <select onchange="changeFontSize(event)">
+                <option value="16px">16px</option>
+                <option value="18px">18px</option>
+                <option value="20px">20px</option>
+            </select>
+        </div>
+        <div class="note-content" contenteditable="true" id="note-content" onclick="editContent()"></div>
+        <div class="form-container" id="form-container">
+            <button id="save-button" onclick="saveNote()">Сохранить</button>
+            <!-- Убираем кнопку Удалить, добавив условие на отображение -->
+            <button class="delete-button" id="delete-button" onclick="deleteNote()" style="display:none;">Удалить</button>
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
-  let currentNoteId = null;
+    let currentNoteId = null;
 
-  function showNoteContent(noteElement) {
-    const noteId = noteElement.getAttribute('data-id');
-    const noteTitle = noteElement.innerText;
-    const noteContent = noteElement.getAttribute('data-content');
+    function showNoteContent(noteElement) {
+        const noteId = noteElement.getAttribute('data-id');
+        const noteTitle = noteElement.innerText;
+        const noteContent = noteElement.getAttribute('data-content');
 
-    document.getElementById('note-title').value = noteTitle;
-    document.getElementById('note-content').innerText = noteContent;
-    document.getElementById('note-title').disabled = false; // Разрешаем редактировать титул
-    currentNoteId = noteId;
+        document.getElementById('note-title').value = noteTitle;
+        document.getElementById('note-content').innerText = noteContent;
+        document.getElementById('note-title').disabled = false;
+        currentNoteId = noteId;
 
-    // Показываем кнопки "Сохранить" и "Удалить"
-    document.getElementById('form-container').classList.add('active');
-  }
+        document.getElementById('save-button').innerText = 'Сохранить';
+        document.getElementById('save-button').onclick = function () {
+            saveNote('update', currentNoteId);
+        };
 
-  function editContent() {
-    document.getElementById('note-content').contentEditable = true; // Разрешаем редактировать контент
-  }
+        // Показываем кнопку Удалить только в режиме редактирования заметки
+        document.getElementById('delete-button').style.display = 'inline-block';
 
-  function formatText(command) {
-    document.execCommand(command, false, null);
-  }
+        document.getElementById('note-detail').style.display = 'flex';
+        document.getElementById('form-container').classList.add('active');
+    }
 
-  function changeFontFamily(event) {
-    document.getElementById('note-content').style.fontFamily = event.target.value;
-  }
+    function showCreateNote() {
+        document.getElementById('note-title').value = '';
+        document.getElementById('note-content').innerText = '';
+        document.getElementById('note-title').disabled = false;
+        currentNoteId = null;
 
-  function changeFontSize(event) {
-    document.getElementById('note-content').style.fontSize = event.target.value;
-  }
+        document.getElementById('save-button').innerText = 'Создать';
+        document.getElementById('save-button').onclick = function () {
+            saveNote('create');
+        };
 
-  function saveNote() {
-    const updatedTitle = document.getElementById('note-title').value;
-    const updatedContent = document.getElementById('note-content').innerHTML;
+        // Скрываем кнопку Удалить при создании новой заметки
+        document.getElementById('delete-button').style.display = 'none';
 
-    const updatedNoteDto = {
-      title: updatedTitle,
-      content: updatedContent
-    };
+        document.getElementById('note-detail').style.display = 'flex';
+        document.getElementById('form-container').classList.add('active');
+    }
 
-    fetch(`/update/${currentNoteId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(updatedNoteDto)
-    }).then(response => {
-      if (response.ok) {
-        alert('Заметка обновлена!');
-        document.getElementById('note-title').disabled = true;
-        document.getElementById('note-content').contentEditable = false;
-        location.reload();
-      }
-    }).catch(error => {
-      alert('Ошибка при сохранении заметки');
-    });
-  }
 
-  function deleteNote() {
-    fetch(`/delete/${currentNoteId}`, {
-      method: 'POST',
-    }).then(response => {
-      if (response.ok) {
-        alert('Заметка удалена!');
-        location.reload(); // Обновляем страницу, чтобы удалить заметку из списка
-      }
-    }).catch(error => {
-      alert('Ошибка при удалении заметки');
-    });
-  }
+    function editContent() {
+        document.getElementById('note-content').contentEditable = true;
+    }
+
+    function formatText(command) {
+        document.execCommand(command, false, null);
+    }
+
+    function changeFontFamily(event) {
+        document.getElementById('note-content').style.fontFamily = event.target.value;
+    }
+
+    function changeFontSize(event) {
+        document.getElementById('note-content').style.fontSize = event.target.value;
+    }
+
+    function saveNote(action, noteId = null) {
+        const updatedTitle = document.getElementById('note-title').value;
+        const updatedContent = document.getElementById('note-content').innerHTML;
+
+        const updatedNoteDto = {
+            title: updatedTitle,
+            content: updatedContent
+        };
+
+        const url = action === 'create' ? '/create' : `/update/${noteId}`;
+
+        fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(updatedNoteDto)
+        }).then(response => {
+            if (response.ok) {
+                alert(action === 'create' ? 'Заметка создана!' : 'Заметка обновлена!');
+                location.reload();
+            }
+        }).catch(error => {
+            alert('Ошибка при сохранении заметки');
+        });
+    }
+
+    function deleteNote() {
+        fetch(`/delete/${currentNoteId}`, {
+            method: 'POST',
+        }).then(response => {
+            if (response.ok) {
+                alert('Заметка удалена!');
+                location.reload();
+            }
+        }).catch(error => {
+            alert('Ошибка при удалении заметки');
+        });
+    }
 </script>
 </body>
 </html>
