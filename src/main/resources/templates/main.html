@@ -170,7 +170,6 @@
         <div class="note-content" contenteditable="true" id="note-content" onclick="editContent()"></div>
         <div class="form-container" id="form-container">
             <button id="save-button" onclick="saveNote()">Сохранить</button>
-            <!-- Убираем кнопку Удалить, добавив условие на отображение -->
             <button class="delete-button" id="delete-button" onclick="deleteNote()" style="display:none;">Удалить</button>
         </div>
     </div>
@@ -194,7 +193,6 @@
             saveNote('update', currentNoteId);
         };
 
-        // Показываем кнопку Удалить только в режиме редактирования заметки
         document.getElementById('delete-button').style.display = 'inline-block';
 
         document.getElementById('note-detail').style.display = 'flex';
@@ -212,7 +210,6 @@
             saveNote('create');
         };
 
-        // Скрываем кнопку Удалить при создании новой заметки
         document.getElementById('delete-button').style.display = 'none';
 
         document.getElementById('note-detail').style.display = 'flex';
