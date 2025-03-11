@@ -57,10 +57,10 @@
             font-size: 1.7em;
             font-weight: bold;
             background-color: #444;
-            border: 2px solid #ffffff;
+            border: 2px solid #7a7a7a;
             border-radius: 4px;
             padding: 4px;
-            color: #fff;
+            color: #ffffff;
             text-align: center;
         }
 
@@ -97,7 +97,7 @@
         }
 
         .toolbar button:hover {
-            background-color: #555;
+            background-color: #555555;
         }
 
         .form-container button {
@@ -132,6 +132,15 @@
             display: block;
         }
 
+        input[type="file"] {
+            display: none;
+        }
+
+        .image-preview {
+            max-width: 100%;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
     </style>
 </head>
 <body>
@@ -140,14 +149,16 @@
         <h2>Список Заметок</h2>
         <ul>
             <li class="note-item" onclick="showCreateNote()">
-                Создать новую заметку
+                Создать заметку
             </li>
             <li th:each="note : ${notes}"
                 class="note-item"
                 th:text="${note.title}"
                 th:data-id="${note.id}"
                 th:data-content="${note.content}"
-                onclick="showNoteContent(this)">
+                th:data-font-family="${note.fontFamily}"
+            th:data-font-size="${note.fontSize}"
+            onclick="showNoteContent(this)">
             </li>
         </ul>
     </div>
@@ -169,6 +180,8 @@
                 <option value="18px">18px</option>
                 <option value="20px">20px</option>
             </select>
+            <label for="file-input" class="file-input-label">Добавить фото</label>
+            <input type="file" id="file-input" onchange="handleFileSelect(event)" accept="image/*">
         </div>
         <div class="note-content" contenteditable="true" id="note-content" onclick="editContent()"></div>
         <div class="form-container" id="form-container">
@@ -185,11 +198,16 @@
         const noteId = noteElement.getAttribute('data-id');
         const noteTitle = noteElement.innerText;
         const noteContent = noteElement.getAttribute('data-content');
+        const noteFontFamily = noteElement.getAttribute('data-font-family');
+        const noteFontSize = noteElement.getAttribute('data-font-size');
 
         document.getElementById('note-title').value = noteTitle;
         document.getElementById('note-content').innerHTML = noteContent;
         document.getElementById('note-title').disabled = false;
         currentNoteId = noteId;
+
+        document.getElementById('note-content').style.fontFamily = noteFontFamily;
+        document.getElementById('note-content').style.fontSize = noteFontSize;
 
         document.getElementById('save-button').innerText = 'Сохранить';
         document.getElementById('save-button').onclick = function () {
@@ -219,6 +237,21 @@
         document.getElementById('form-container').classList.add('active');
     }
 
+    function handleFileSelect(event) {
+        const file = event.target.files[0];
+        if (file && file.type.startsWith('image/')) {
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const imgElement = document.createElement('img');
+                imgElement.src = e.target.result;
+                imgElement.classList.add('image-preview');
+                document.getElementById('note-content').appendChild(imgElement);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            alert('Пожалуйста, выберите изображение');
+        }
+    }
 
     function editContent() {
         document.getElementById('note-content').contentEditable = true;
@@ -240,9 +273,14 @@
         const updatedTitle = document.getElementById('note-title').value;
         const updatedContent = document.getElementById('note-content').innerHTML;
 
+        const fontFamily = document.querySelector('select[onchange="changeFontFamily(event)"]').value;
+        const fontSize = document.querySelector('select[onchange="changeFontSize(event)"]').value;
+
         const updatedNoteDto = {
             title: updatedTitle,
-            content: updatedContent
+            content: updatedContent,
+            fontFamily: fontFamily,
+            fontSize: fontSize
         };
 
         const url = action === 'create' ? '/create' : `/update/${noteId}`;

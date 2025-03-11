@@ -6,4 +6,6 @@ import lombok.Data;
 public class NoteDto {
     private String title;
     private String content;
+    private String fontFamily;
+    private String fontSize;
 }

@@ -16,7 +16,10 @@ public class Note implements Serializable {
     private Long id;
 
     private String title;
+    @Column(columnDefinition = "TEXT")
     private String content;
+    private String fontFamily;
+    private String fontSize;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 

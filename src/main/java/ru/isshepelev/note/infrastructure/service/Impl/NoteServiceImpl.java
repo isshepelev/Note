@@ -37,6 +37,8 @@ public class NoteServiceImpl implements NoteService {
         note.setUpdatedAt(LocalDateTime.now());
         note.setContent(noteDto.getContent());
         note.setTitle(noteDto.getTitle());
+        note.setFontFamily(noteDto.getFontFamily());
+        note.setFontSize(noteDto.getFontSize());
         note.setAttachments(null); //TODO заменить на фото
         noteRepository.save(note);
     }
@@ -63,6 +65,8 @@ public class NoteServiceImpl implements NoteService {
         note.setUpdatedAt(LocalDateTime.now());
         note.setTitle(noteDto.getTitle());
         note.setContent(noteDto.getContent());
+        note.setFontFamily(noteDto.getFontFamily());
+        note.setFontSize(noteDto.getFontSize());
         note.setAttachments(null); //TODO заменить на фото
         noteRepository.save(note);
     }
