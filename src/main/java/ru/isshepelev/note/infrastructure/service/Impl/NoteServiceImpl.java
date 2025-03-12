@@ -39,7 +39,7 @@ public class NoteServiceImpl implements NoteService {
         note.setTitle(noteDto.getTitle());
         note.setFontFamily(noteDto.getFontFamily());
         note.setFontSize(noteDto.getFontSize());
-        note.setAttachments(null); //TODO заменить на фото
+        note.setPhotoPaths(noteDto.getPhotoPaths());
         noteRepository.save(note);
     }
 
@@ -67,7 +67,7 @@ public class NoteServiceImpl implements NoteService {
         note.setContent(noteDto.getContent());
         note.setFontFamily(noteDto.getFontFamily());
         note.setFontSize(noteDto.getFontSize());
-        note.setAttachments(null); //TODO заменить на фото
+        note.setPhotoPaths(noteDto.getPhotoPaths());
         noteRepository.save(note);
     }
 

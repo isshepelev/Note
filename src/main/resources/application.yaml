@@ -13,3 +13,6 @@ spring:
   session:
     timeout: 60m
     store-type: redis
+  web:
+    resources:
+      static-locations: file:photo/

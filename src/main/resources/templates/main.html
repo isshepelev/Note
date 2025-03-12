@@ -239,18 +239,26 @@
 
     function handleFileSelect(event) {
         const file = event.target.files[0];
-        if (file && file.type.startsWith('image/')) {
-            const reader = new FileReader();
-            reader.onload = function (e) {
+        if (!file || !file.type.startsWith('image/')) {
+            alert('Выберите изображение');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("file", file);
+
+        fetch('/photos/upload', {
+            method: 'POST',
+            body: formData
+        })
+            .then(response => response.text())
+            .then(photoPath => {
                 const imgElement = document.createElement('img');
-                imgElement.src = e.target.result;
+                imgElement.src = photoPath;
                 imgElement.classList.add('image-preview');
                 document.getElementById('note-content').appendChild(imgElement);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            alert('Пожалуйста, выберите изображение');
-        }
+            })
+            .catch(error => alert('Ошибка загрузки фото'));
     }
 
     function editContent() {

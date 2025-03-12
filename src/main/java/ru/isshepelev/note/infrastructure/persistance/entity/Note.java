@@ -23,8 +23,8 @@ public class Note implements Serializable {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL)
-    private List<Attachment> attachments;
+    @ElementCollection
+    private List<String> photoPaths = new ArrayList<>();
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)
