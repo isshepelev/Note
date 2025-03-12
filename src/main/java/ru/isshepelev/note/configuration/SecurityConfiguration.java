@@ -17,7 +17,9 @@ import ru.isshepelev.note.infrastructure.service.CustomUserDetailsService;
 @RequiredArgsConstructor
 @Slf4j
 public class SecurityConfiguration {
+
     private final CustomUserDetailsService customUserDetailsService;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http

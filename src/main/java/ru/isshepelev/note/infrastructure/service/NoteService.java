@@ -1,5 +1,8 @@
 package ru.isshepelev.note.infrastructure.service;
 
+import org.springframework.core.io.Resource;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 import ru.isshepelev.note.infrastructure.persistance.entity.Note;
 import ru.isshepelev.note.ui.dto.NoteDto;
 
@@ -14,4 +17,8 @@ public interface NoteService {
     void deleteById(Long noteId);
 
     void create(NoteDto noteDto, String username);
+
+    String uploadPhoto(MultipartFile file);
+
+    ResponseEntity<Resource> getImage(String filename);
 }

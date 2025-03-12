@@ -2,7 +2,6 @@ package ru.isshepelev.note.infrastructure.service.Impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.isshepelev.note.infrastructure.exception.UsernameAlreadyExistsException;
@@ -14,7 +13,6 @@ import ru.isshepelev.note.infrastructure.service.UserService;
 import ru.isshepelev.note.ui.dto.SignUpDto;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -49,15 +47,5 @@ public class UserServiceImpl implements UserService {
         note.setUpdatedAt(LocalDateTime.now());
         log.info("Создание новой заметки у " + user);
         noteRepository.save(note);
-    }
-
-    @Override
-    public User getUserByUsername(String username) {
-        User user = userRepository.findByUsername(username);
-        if (user == null) {
-            log.error("пользователь с " + username + " не найден");
-            throw new UsernameNotFoundException("user not found " + username);
-        }
-        return user;
     }
 }

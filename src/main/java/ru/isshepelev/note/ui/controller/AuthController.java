@@ -15,6 +15,7 @@ import ru.isshepelev.note.ui.dto.SignUpDto;
 @AllArgsConstructor
 @Slf4j
 public class AuthController {
+
     private final UserService userService;
 
     @GetMapping("/register")
