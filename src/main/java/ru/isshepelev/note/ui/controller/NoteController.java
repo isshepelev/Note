@@ -23,6 +23,7 @@ public class NoteController {
     @PostMapping("/create")
     public String createNote(@RequestBody NoteDto noteDto, Principal principal){
         noteService.create(noteDto,principal.getName());
+        System.out.println(noteDto.getContent());
         return "redirect:/";
     }
 
