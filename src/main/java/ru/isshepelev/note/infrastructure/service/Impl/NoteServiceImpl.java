@@ -1,7 +1,10 @@
 package ru.isshepelev.note.infrastructure.service.Impl;
 
+import jakarta.persistence.EntityNotFoundException;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpStatus;
@@ -23,7 +26,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -33,7 +35,9 @@ public class NoteServiceImpl implements NoteService {
 
     private final NoteRepository noteRepository;
     private final UserRepository userRepository;
-    private final String UPLOAD_DIR = "src/main/resources/static/images/";
+
+    @Value("${upload.dir}")
+    private String UPLOAD_DIR;
 
     @Override
     public List<Note> getAllNotes(String username) {
@@ -41,13 +45,11 @@ public class NoteServiceImpl implements NoteService {
     }
 
     @Override
+    @Transactional
     public void update(Long noteId, NoteDto noteDto) {
-        Optional<Note> noteOpt = noteRepository.findById(noteId);
-        if (noteOpt.isEmpty()) {
-            log.error("заметка с " + noteId + " не найдена");
-            throw new RuntimeException("note not found " + noteId);
-        }
-        Note note = noteOpt.get();
+        Note note = noteRepository.findById(noteId)
+                .orElseThrow(() -> new EntityNotFoundException("Заметка не найдена: " + noteId));
+
         note.setUpdatedAt(LocalDateTime.now());
         note.setContent(noteDto.getContent());
         note.setTitle(noteDto.getTitle());
@@ -55,14 +57,18 @@ public class NoteServiceImpl implements NoteService {
         note.setFontSize(noteDto.getFontSize());
         note.setPhotoPaths(noteDto.getPhotoPaths());
         noteRepository.save(note);
+        log.info("обновление заметки №" + noteId);
     }
 
     @Override
+    @Transactional
     public void deleteById(Long noteId) {
         noteRepository.deleteById(noteId);
+        log.info("удаление заметки №{}", noteId);
     }
 
     @Override
+    @Transactional
     public void create(NoteDto noteDto, String username) {
         if (noteDto == null) {
             log.warn("список пустой " + noteDto);
@@ -83,6 +89,7 @@ public class NoteServiceImpl implements NoteService {
         note.setFontSize(noteDto.getFontSize());
         note.setPhotoPaths(noteDto.getPhotoPaths());
         noteRepository.save(note);
+        log.info("создание заметки {}", note);
     }
 
     @Override

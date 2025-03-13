@@ -1,5 +1,6 @@
 package ru.isshepelev.note.infrastructure.service.Impl;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,8 +25,9 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public void registerUser(SignUpDto signUpDto) {
-        if (userRepository.findByUsername(signUpDto.getUsername()) != null) {
+        if (userRepository.existsByUsername(signUpDto.getUsername())) {
             throw new UsernameAlreadyExistsException("Пользователь уже существует");
         }
 
@@ -45,7 +47,7 @@ public class UserServiceImpl implements UserService {
         note.setContent(content);
         note.setCreatedAt(LocalDateTime.now());
         note.setUpdatedAt(LocalDateTime.now());
-        log.info("Создание новой заметки у " + user);
+        log.info("Создание новой заметки у {}", user);
         noteRepository.save(note);
     }
 }
