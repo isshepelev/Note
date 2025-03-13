@@ -16,3 +16,6 @@ spring:
   web:
     resources:
       static-locations: file:photo/
+
+upload:
+  dir: src/main/resources/static/images/
