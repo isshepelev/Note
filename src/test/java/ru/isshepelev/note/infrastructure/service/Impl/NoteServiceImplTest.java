@@ -11,10 +11,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.web.multipart.MultipartFile;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import ru.isshepelev.note.TestContainersConfig;
 import ru.isshepelev.note.infrastructure.persistance.entity.Note;
 import ru.isshepelev.note.infrastructure.persistance.entity.User;
 import ru.isshepelev.note.infrastructure.persistance.repository.NoteRepository;
@@ -28,13 +30,8 @@ import java.util.Optional;
 
 @Testcontainers
 @ExtendWith(MockitoExtension.class)
+@ContextConfiguration(classes = TestContainersConfig.class)
 public class NoteServiceImplTest {
-
-    @Container
-    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13")
-            .withDatabaseName("testdb")
-            .withUsername("test")
-            .withPassword("test");
 
     @Mock
     private NoteRepository noteRepository;

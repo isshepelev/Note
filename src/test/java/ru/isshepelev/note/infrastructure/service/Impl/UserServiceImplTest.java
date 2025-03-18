@@ -11,9 +11,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.test.context.ContextConfiguration;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
+import ru.isshepelev.note.TestContainersConfig;
 import ru.isshepelev.note.infrastructure.exception.UsernameAlreadyExistsException;
 import ru.isshepelev.note.infrastructure.persistance.entity.Note;
 import ru.isshepelev.note.infrastructure.persistance.entity.User;
@@ -23,13 +25,8 @@ import ru.isshepelev.note.ui.dto.SignUpDto;
 
 @Testcontainers
 @ExtendWith(MockitoExtension.class)
+@ContextConfiguration(classes = TestContainersConfig.class)
 public class UserServiceImplTest {
-
-    @Container
-    private static final PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>("postgres:13")
-            .withDatabaseName("testdb")
-            .withUsername("test")
-            .withPassword("test");
 
     @Mock
     private UserRepository userRepository;
