@@ -1,0 +1,6 @@
+upload:
+  dir: src/main/resources/static/images/
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
