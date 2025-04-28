@@ -13,8 +13,9 @@ public class NoteHistory implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
+    @Column(columnDefinition = "TEXT")
     private String oldContent;
+    @Column(columnDefinition = "TEXT")
     private String newContent;
     private LocalDateTime changedAt;
 
