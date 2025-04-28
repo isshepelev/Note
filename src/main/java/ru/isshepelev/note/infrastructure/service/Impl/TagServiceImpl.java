@@ -9,6 +9,7 @@ import ru.isshepelev.note.infrastructure.persistance.entity.Note;
 import ru.isshepelev.note.infrastructure.persistance.entity.Tag;
 import ru.isshepelev.note.infrastructure.persistance.repository.NoteRepository;
 import ru.isshepelev.note.infrastructure.persistance.repository.TagRepository;
+import ru.isshepelev.note.infrastructure.service.TagService;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,11 +17,13 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class TagServiceImpl {
+public class TagServiceImpl implements TagService {
+
     private final TagRepository tagRepository;
     private final NoteRepository noteRepository;
 
     @Transactional
+    @Override
     public void addTagsToNote(Long noteId, List<String> tagNames) {
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new EntityNotFoundException("Заметка не найдена: " + noteId));

@@ -11,19 +11,21 @@ import ru.isshepelev.note.infrastructure.persistance.entity.User;
 import ru.isshepelev.note.infrastructure.persistance.repository.NoteHistoryRepository;
 import ru.isshepelev.note.infrastructure.persistance.repository.NoteRepository;
 import ru.isshepelev.note.infrastructure.persistance.repository.UserRepository;
+import ru.isshepelev.note.infrastructure.service.NoteHistoryService;
 
 import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class NoteHistoryServiceImpl {
+public class NoteHistoryServiceImpl implements NoteHistoryService {
 
     private final NoteHistoryRepository noteHistoryRepository;
     private final NoteRepository noteRepository;
     private final UserRepository userRepository;
 
     @Transactional
+    @Override
     public void saveNoteHistory(Long noteId, String oldContent, String newContent, String username) {
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new EntityNotFoundException("Заметка не найдена: " + noteId));

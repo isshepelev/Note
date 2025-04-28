@@ -43,7 +43,6 @@ public class UserServiceImpl implements UserService {
         createNote("Пример заголовка...", "Пример текста...", user);
 
 
-
     }
 
     private void createNote(String title, String content, User user) {

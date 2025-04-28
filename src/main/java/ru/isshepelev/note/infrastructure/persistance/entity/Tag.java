@@ -1,7 +1,6 @@
 package ru.isshepelev.note.infrastructure.persistance.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 import java.util.List;
@@ -13,6 +12,7 @@ public class Tag {
     public Tag(String name) {
         this.name = name;
     }
+
     public Tag() {
     }
 

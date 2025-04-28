@@ -15,9 +15,10 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.isshepelev.note.infrastructure.persistance.entity.Note;
 import ru.isshepelev.note.infrastructure.persistance.entity.User;
 import ru.isshepelev.note.infrastructure.persistance.repository.NoteRepository;
-import ru.isshepelev.note.infrastructure.persistance.repository.TagRepository;
 import ru.isshepelev.note.infrastructure.persistance.repository.UserRepository;
+import ru.isshepelev.note.infrastructure.service.NoteHistoryService;
 import ru.isshepelev.note.infrastructure.service.NoteService;
+import ru.isshepelev.note.infrastructure.service.TagService;
 import ru.isshepelev.note.ui.dto.NoteDto;
 
 import java.io.IOException;
@@ -36,8 +37,8 @@ public class NoteServiceImpl implements NoteService {
 
     private final NoteRepository noteRepository;
     private final UserRepository userRepository;
-    private final TagServiceImpl tagService;
-    private final NoteHistoryServiceImpl noteHistoryService;
+    private final TagService tagService;
+    private final NoteHistoryService noteHistoryService;
 
     @Value("${upload.dir}")
     private String UPLOAD_DIR;
