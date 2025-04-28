@@ -22,6 +22,4 @@ public interface NoteService {
     String uploadPhoto(MultipartFile file);
 
     ResponseEntity<Resource> getImage(String filename);
-
-    void addAttachment(Long noteId, MultipartFile file);
 }

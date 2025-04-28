@@ -38,7 +38,6 @@ public class NoteServiceImpl implements NoteService {
     private final UserRepository userRepository;
     private final TagServiceImpl tagService;
     private final NoteHistoryServiceImpl noteHistoryService;
-    private final AttachmentServiceImpl attachmentService;
 
     @Value("${upload.dir}")
     private String UPLOAD_DIR;
@@ -149,14 +148,4 @@ public class NoteServiceImpl implements NoteService {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
-
-    @Transactional
-    @Override
-    public void addAttachment(Long noteId, MultipartFile file) {
-        String filePath = uploadPhoto(file);
-        String fileType = file.getContentType();
-
-        attachmentService.addAttachmentToNote(noteId, filePath, fileType);
-    }
-
 }

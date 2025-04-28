@@ -39,9 +39,6 @@ public class Note implements Serializable {
     )
     private List<Tag> tags;
 
-    @OneToMany(mappedBy = "note", cascade = CascadeType.ALL)
-    private List<Attachment> attachments;
-
     @ElementCollection
     private List<String> photoPaths = new ArrayList<>();
 
