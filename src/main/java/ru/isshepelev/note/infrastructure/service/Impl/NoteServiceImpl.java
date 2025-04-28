@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 import ru.isshepelev.note.infrastructure.persistance.entity.Note;
 import ru.isshepelev.note.infrastructure.persistance.entity.User;
 import ru.isshepelev.note.infrastructure.persistance.repository.NoteRepository;
+import ru.isshepelev.note.infrastructure.persistance.repository.TagRepository;
 import ru.isshepelev.note.infrastructure.persistance.repository.UserRepository;
 import ru.isshepelev.note.infrastructure.service.NoteService;
 import ru.isshepelev.note.ui.dto.NoteDto;
@@ -35,6 +36,9 @@ public class NoteServiceImpl implements NoteService {
 
     private final NoteRepository noteRepository;
     private final UserRepository userRepository;
+    private final TagServiceImpl tagService;
+    private final NoteHistoryServiceImpl noteHistoryService;
+    private final AttachmentServiceImpl attachmentService;
 
     @Value("${upload.dir}")
     private String UPLOAD_DIR;
@@ -50,15 +54,25 @@ public class NoteServiceImpl implements NoteService {
         Note note = noteRepository.findById(noteId)
                 .orElseThrow(() -> new EntityNotFoundException("Заметка не найдена: " + noteId));
 
+        String oldContent = note.getContent();
+
         note.setUpdatedAt(LocalDateTime.now());
-        note.setContent(noteDto.getContent());
         note.setTitle(noteDto.getTitle());
+        note.setContent(noteDto.getContent());
         note.setFontFamily(noteDto.getFontFamily());
         note.setFontSize(noteDto.getFontSize());
         note.setPhotoPaths(noteDto.getPhotoPaths());
+
         noteRepository.save(note);
         log.info("обновление заметки №" + noteId);
+
+        if (noteDto.getTags() != null && !noteDto.getTags().isEmpty()) {
+            tagService.addTagsToNote(noteId, noteDto.getTags());
+        }
+
+        noteHistoryService.saveNoteHistory(noteId, oldContent, noteDto.getContent(), note.getUser().getUsername());
     }
+
 
     @Override
     @Transactional
@@ -88,8 +102,15 @@ public class NoteServiceImpl implements NoteService {
         note.setFontFamily(noteDto.getFontFamily());
         note.setFontSize(noteDto.getFontSize());
         note.setPhotoPaths(noteDto.getPhotoPaths());
+
         noteRepository.save(note);
         log.info("создание заметки {}", note);
+
+        if (noteDto.getTags() != null && !noteDto.getTags().isEmpty()) {
+            tagService.addTagsToNote(note.getId(), noteDto.getTags());
+        }
+        noteHistoryService.saveNoteHistory(note.getId(), "", noteDto.getContent(), username);
+
     }
 
     @Override
@@ -127,6 +148,15 @@ public class NoteServiceImpl implements NoteService {
             log.error("Ошибка загрузки изображения", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @Transactional
+    @Override
+    public void addAttachment(Long noteId, MultipartFile file) {
+        String filePath = uploadPhoto(file);
+        String fileType = file.getContentType();
+
+        attachmentService.addAttachmentToNote(noteId, filePath, fileType);
     }
 
 }

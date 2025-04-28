@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -176,8 +176,9 @@
                 th:data-id="${note.id}"
                 th:data-content="${note.content}"
                 th:data-font-family="${note.fontFamily}"
-            th:data-font-size="${note.fontSize}"
-            onclick="showNoteContent(this)">
+                th:data-font-size="${note.fontSize}"
+                th:data-tags="${#strings.listJoin(note.tags.![name], ',')}"
+                onclick="showNoteContent(this)">
             </li>
         </ul>
     </div>
@@ -185,6 +186,14 @@
         <h2 class="note-title">
             <input type="text" id="note-title" disabled />
         </h2>
+
+        <div class="tags-container" id="tags-container"></div>
+
+        <div class="tags-input">
+            <input type="text" id="tag-input" placeholder="Добавить тег">
+            <button onclick="addTag()">+</button>
+        </div>
+
         <div class="toolbar">
             <button onclick="formatText('bold')">Жирный</button>
             <button onclick="formatText('italic')">Курсив</button>
@@ -212,6 +221,7 @@
 
 <script>
     let currentNoteId = null;
+    let currentTags = [];
 
     function showNoteContent(noteElement) {
         const noteId = noteElement.getAttribute('data-id');
@@ -219,6 +229,7 @@
         const noteContent = noteElement.getAttribute('data-content');
         const noteFontFamily = noteElement.getAttribute('data-font-family');
         const noteFontSize = noteElement.getAttribute('data-font-size');
+        const tagsString = noteElement.getAttribute('data-tags');
 
         document.getElementById('note-title').value = noteTitle;
         document.getElementById('note-content').innerHTML = noteContent;
@@ -227,6 +238,10 @@
 
         document.getElementById('note-content').style.fontFamily = noteFontFamily;
         document.getElementById('note-content').style.fontSize = noteFontSize;
+
+        // Очищаем текущие теги и загружаем новые
+        currentTags = tagsString ? tagsString.split(',') : [];
+        updateTagsDisplay();
 
         document.getElementById('save-button').innerText = 'Сохранить';
         document.getElementById('save-button').onclick = function () {
@@ -245,6 +260,10 @@
         document.getElementById('note-title').disabled = false;
         currentNoteId = null;
 
+        // Очищаем теги для новой заметки
+        currentTags = [];
+        updateTagsDisplay();
+
         document.getElementById('save-button').innerText = 'Создать';
         document.getElementById('save-button').onclick = function () {
             saveNote('create');
@@ -254,6 +273,37 @@
 
         document.getElementById('note-detail').style.display = 'flex';
         document.getElementById('form-container').classList.add('active');
+    }
+
+    function updateTagsDisplay() {
+        const tagsContainer = document.getElementById('tags-container');
+        tagsContainer.innerHTML = '';
+
+        currentTags.forEach((tag, index) => {
+            const tagElement = document.createElement('div');
+            tagElement.className = 'tag';
+            tagElement.innerHTML = `
+                ${tag}
+                <span class="tag-remove" onclick="removeTag(${index})">×</span>
+            `;
+            tagsContainer.appendChild(tagElement);
+        });
+    }
+
+    function addTag() {
+        const tagInput = document.getElementById('tag-input');
+        const tagValue = tagInput.value.trim();
+
+        if (tagValue && !currentTags.includes(tagValue)) {
+            currentTags.push(tagValue);
+            updateTagsDisplay();
+            tagInput.value = '';
+        }
+    }
+
+    function removeTag(index) {
+        currentTags.splice(index, 1);
+        updateTagsDisplay();
     }
 
     function handleFileSelect(event) {
@@ -307,7 +357,8 @@
             title: updatedTitle,
             content: updatedContent,
             fontFamily: fontFamily,
-            fontSize: fontSize
+            fontSize: fontSize,
+            tags: currentTags
         };
 
         const url = action === 'create' ? '/create' : `/update/${noteId}`;
@@ -370,6 +421,13 @@
             };
         };
     }
+
+    // Обработка нажатия Enter в поле ввода тега
+    document.getElementById('tag-input').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            addTag();
+        }
+    });
 </script>
 </body>
 </html>

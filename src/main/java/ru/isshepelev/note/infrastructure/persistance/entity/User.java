@@ -11,7 +11,6 @@ import java.util.List;
 @Table(name = "users")
 @Data
 public class User implements Serializable {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -25,5 +24,9 @@ public class User implements Serializable {
     @ToString.Exclude
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Note> notes;
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<NoteHistory> noteHistories;
 
 }

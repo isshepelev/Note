@@ -2,6 +2,7 @@ package ru.isshepelev.note.ui.dto;
 
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -11,5 +12,6 @@ public class NoteDto {
     private String content;
     private String fontFamily;
     private String fontSize;
-    private List<String> photoPaths;
+    private List<String> photoPaths = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
 }

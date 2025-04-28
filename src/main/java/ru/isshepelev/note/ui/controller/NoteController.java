@@ -28,8 +28,8 @@ public class NoteController {
     }
 
     @PostMapping("/update/{noteId}")
-    public String updateNote(@PathVariable Long noteId, @RequestBody NoteDto note) {
-        noteService.update(noteId, note);
+    public String updateNote(@PathVariable Long noteId, @RequestBody NoteDto noteDto) {
+        noteService.update(noteId, noteDto);
         return "redirect:/";
     }
 

@@ -1,5 +1,6 @@
 package ru.isshepelev.note.infrastructure.service;
 
+import jakarta.transaction.Transactional;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,4 +22,6 @@ public interface NoteService {
     String uploadPhoto(MultipartFile file);
 
     ResponseEntity<Resource> getImage(String filename);
+
+    void addAttachment(Long noteId, MultipartFile file);
 }

@@ -7,13 +7,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.isshepelev.note.infrastructure.exception.UsernameAlreadyExistsException;
 import ru.isshepelev.note.infrastructure.persistance.entity.Note;
+import ru.isshepelev.note.infrastructure.persistance.entity.Tag;
 import ru.isshepelev.note.infrastructure.persistance.entity.User;
 import ru.isshepelev.note.infrastructure.persistance.repository.NoteRepository;
+import ru.isshepelev.note.infrastructure.persistance.repository.TagRepository;
 import ru.isshepelev.note.infrastructure.persistance.repository.UserRepository;
 import ru.isshepelev.note.infrastructure.service.UserService;
 import ru.isshepelev.note.ui.dto.SignUpDto;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +26,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final NoteRepository noteRepository;
     private final PasswordEncoder passwordEncoder;
+    private final TagRepository tagRepository;
 
     @Override
     @Transactional
@@ -38,6 +42,8 @@ public class UserServiceImpl implements UserService {
         log.info("регистрация пользователя {}", user);
         createNote("Пример заголовка...", "Пример текста...", user);
 
+
+
     }
 
     private void createNote(String title, String content, User user) {
@@ -49,5 +55,10 @@ public class UserServiceImpl implements UserService {
         note.setUpdatedAt(LocalDateTime.now());
         log.info("Создание новой заметки у {}", user);
         noteRepository.save(note);
+
+        Tag tag = new Tag();
+        tag.setName("Пример тега");
+        tag.setNotes(List.of(note));
+        tagRepository.save(tag);
     }
 }
