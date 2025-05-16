@@ -1,13 +1,32 @@
-## Требования
+## Курсовая работа
 
-Для запуска проекта необходимо иметь установленный [Docker](https://www.docker.com/).
+# Notes Application 🗒️
 
-## Запуск проекта
+Веб-приложение для управления заметками с историей изменений, тегами и медиа-вложениями
 
-1. Клонируйте репозиторий:
-  git clone https://github.com/isshepelev/Note.git
+## 🛠 Технологии
 
-2. Перейдите в папку проекта
-   
-3. Запустите проект с помощью Docker Compose:
-   docker compose up --build
+**Backend:**
+- Java 17
+- Spring Boot 3
+- Spring Security
+- Spring Data JPA
+- PostgreSQL
+- Redis (для сессий)
+
+**Frontend:**
+- Thymeleaf
+- Vanilla JS
+- HTML5/CSS3
+
+## 🚀 Быстрый старт
+
+### Требования
+- Docker и Docker Compose
+- Или Java 17 + PostgreSQL + Redis
+
+### С Docker
+```bash
+git clone https://github.com/yourusername/notes-app.git
+cd notes-app
+docker compose up --build
