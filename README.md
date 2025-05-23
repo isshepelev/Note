@@ -27,6 +27,6 @@
 
 ### С Docker
 ```bash
-git clone https://github.com/yourusername/notes-app.git
+git clone [https://github.com/yourusername/notes-app.git](https://github.com/isshepelev/Note.git)
 cd notes-app
 docker compose up --build
